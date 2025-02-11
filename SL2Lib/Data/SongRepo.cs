@@ -6,7 +6,7 @@ namespace SL2Lib.Data
     {
         private SongList m_songList;
 
-        private string? m_filePath;
+        private IDataSaver? m_dataSaver;
 
         public ICollection<Song> Songs => m_songList.Songs;
 
@@ -21,29 +21,30 @@ namespace SL2Lib.Data
             var songRepo = new SongRepo(string.Empty)
             {
                 m_songList = loader.Load(),
-                m_filePath = loader.Path
             };
+
+            if (loader is IDataSaver saver)
+            {
+                songRepo.m_dataSaver = saver;
+            }
 
             return songRepo;
         }
 
         public void Persist(string filePath)
         {
-            m_filePath = filePath;
-
-            IDataSaver dataStore = new DataStore(filePath);
-            dataStore.Persist();
+            m_dataSaver = new DataStore(filePath);
+            m_dataSaver.Persist(m_songList);
         }
 
         public void Persist()
         {
-            if (string.IsNullOrWhiteSpace(m_filePath))
+            if (m_dataSaver == null)
             {
                 throw new InvalidOperationException("No filepath specified.");
             }
 
-            IDataSaver dataStore = new DataStore(m_filePath);
-            dataStore.Persist();
+            m_dataSaver.Persist(m_songList);
         }
     }
 }

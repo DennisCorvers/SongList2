@@ -4,7 +4,7 @@ namespace SL2Lib.Data
 {
     internal class SongService
     {
-        private ISongRepo m_songRepo;
+        private readonly ISongRepo m_songRepo;
 
         public IEnumerable<Song> SongList => m_songRepo.Songs;
 
@@ -21,12 +21,33 @@ namespace SL2Lib.Data
 
         public void RemoveSongs(IEnumerable<Song> songs)
         {
-            // Remove songs
+            foreach (var song in songs)
+            {
+                m_songRepo.Songs.Remove(song);
+            }
         }
 
         public IEnumerable<Song> FindSongs(string? title, string? artist, string? album)
         {
-            throw new NotImplementedException();
+            IEnumerable<Song> query = m_songRepo.Songs;
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                query = query.Where(song => song.Name.Contains(title, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(artist))
+            {
+                query = query.Where(song => song.Artist != null && song.Artist.Contains(artist, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(album))
+            {
+                query = query.Where(song => song.Album != null && song.Album.Contains(album, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return query;
         }
+
     }
 }

@@ -10,7 +10,7 @@ namespace SL1Compat
 
         private readonly string m_filePath;
 
-        public string Path => m_filePath;
+        public string FilePath => m_filePath;
 
         public LegacyLoader(string filePath)
         {

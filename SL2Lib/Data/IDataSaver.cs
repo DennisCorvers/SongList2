@@ -1,9 +1,11 @@
-﻿namespace SL2Lib.Data
+﻿using SL2Lib.Models;
+
+namespace SL2Lib.Data
 {
     public interface IDataSaver
     {
-        string Path { get; }
+        string FilePath { get; }
 
-        void Persist();
+        void Persist(SongList data);
     }
 }

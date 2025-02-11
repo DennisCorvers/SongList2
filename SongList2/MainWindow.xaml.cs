@@ -1,4 +1,5 @@
 ﻿using SL2Lib.Data;
+using SongList2.Data;
 using System.Windows;
 
 namespace SongList2
@@ -14,6 +15,9 @@ namespace SongList2
 
             var loader = DataLoaderFactory.Create("D:\\Downloads\\Song List\\Song List\\bh.Song");
             var dat = loader.Load();
+
+            var dataStore = new DataStore("D:\\Downloads\\Song List\\Song List\\bh.Song2");
+            var dat2 = dataStore.Load();
         }
     }
 }

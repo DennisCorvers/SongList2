@@ -8,21 +8,41 @@ namespace SL2Lib.Data
 
         private readonly string m_filePath;
 
-        public string Path => m_filePath;
+        public string FilePath => m_filePath;
 
         public DataStore(string filePath)
         {
-            m_filePath = filePath;
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty.", nameof(filePath));
+            }
+
+            var directory = Path.GetDirectoryName(filePath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+
+            if (directory == null || fileNameWithoutExtension == null)
+            {
+                throw new InvalidOperationException($"Invalid file path: {filePath}");
+            }
+
+            var fileName = $"{fileNameWithoutExtension}.{Extension}";
+            m_filePath = Path.Combine(directory, fileName);
         }
 
         public SongList Load()
         {
-            throw new NotImplementedException();
+            using (var file = File.OpenRead(m_filePath))
+            {
+                return ProtoBuf.Serializer.Deserialize<SongList>(file);
+            }
         }
 
-        public void Persist()
+        public void Persist(SongList data)
         {
-            throw new NotImplementedException();
+            using (var file = File.Create(m_filePath))
+            {
+                ProtoBuf.Serializer.Serialize(file, data);
+            }
         }
     }
 }

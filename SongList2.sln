@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SL2Lib", "SL2Lib\SL2Lib.csproj", "{37136CD3-B3B1-430C-BB67-338F8B964953}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SL2Lib", "SL2Lib\SL2Lib.csproj", "{37136CD3-B3B1-430C-BB67-338F8B964953}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongList2", "SongList2\SongList2.csproj", "{38032382-9500-496A-92E8-2A1079BFDA63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SL1Compat", "SL1Compat\SL1Compat.csproj", "{985DA0C8-A128-4818-B946-15C85AA5136C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{37136CD3-B3B1-430C-BB67-338F8B964953}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37136CD3-B3B1-430C-BB67-338F8B964953}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37136CD3-B3B1-430C-BB67-338F8B964953}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38032382-9500-496A-92E8-2A1079BFDA63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38032382-9500-496A-92E8-2A1079BFDA63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38032382-9500-496A-92E8-2A1079BFDA63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38032382-9500-496A-92E8-2A1079BFDA63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985DA0C8-A128-4818-B946-15C85AA5136C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985DA0C8-A128-4818-B946-15C85AA5136C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985DA0C8-A128-4818-B946-15C85AA5136C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985DA0C8-A128-4818-B946-15C85AA5136C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

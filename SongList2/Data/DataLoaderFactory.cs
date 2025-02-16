@@ -1,14 +1,20 @@
 ﻿using SL1LegacySupport;
 using SL2Lib.Data;
+using SL2Lib.Models;
 using System;
 using System.IO;
 
 namespace SongList2.Data
 {
-    public static class DataLoaderFactory
+    public class DataLoaderFactory : IDataLoaderFactory
     {
-        public static IDataLoader Create(string filePath)
+        public IDataLoader CreateDataLoader(string? filePath)
         {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return new EmptyDataLoader();
+            }
+
             if (!File.Exists(filePath))
             {
                 throw new FileNotFoundException(filePath);
@@ -32,6 +38,11 @@ namespace SongList2.Data
             }
 
             throw new Exception($"Unable to load file: {filePath}");
+        }
+
+        private class EmptyDataLoader : IDataLoader
+        {
+            public SongList Load() => new();
         }
     }
 }

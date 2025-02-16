@@ -8,26 +8,25 @@ namespace SL2Lib.Data
 
         private IDataSaver? m_dataSaver;
 
+        private readonly IDataLoaderFactory m_dataLoaderFactory;
+
         public HashSet<Song> Songs => m_songList.Songs;
 
-        public SongRepo()
+        public SongRepo(IDataLoaderFactory dataLoaderFactory)
         {
+            m_dataLoaderFactory = dataLoaderFactory;
             m_songList = new SongList();
         }
 
-        public static SongRepo Load(IDataLoader loader)
+        public void Load(string? filePath)
         {
-            var songRepo = new SongRepo()
-            {
-                m_songList = loader.Load(),
-            };
+            var loader = m_dataLoaderFactory.CreateDataLoader(filePath);
 
+            m_songList = loader.Load();
             if (loader is IDataSaver saver)
             {
-                songRepo.m_dataSaver = saver;
+                m_dataSaver = saver;
             }
-
-            return songRepo;
         }
 
         public void Persist(string filePath)

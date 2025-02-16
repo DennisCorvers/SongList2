@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SL2Lib.Data;
+using SongList2.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,12 @@ namespace SongList2.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        internal MainWindow(SongOverviewViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
         }
     }
 }

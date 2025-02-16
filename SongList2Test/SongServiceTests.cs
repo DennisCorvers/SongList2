@@ -2,6 +2,7 @@
 using SL2Lib;
 using SL2Lib.Data;
 using SL2Lib.Models;
+using SongList2Test.Factory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace SongList2Test
         [SetUp]
         public void SetUp()
         {
-            var repo = new SongRepo();
+            var repo = new SongRepo(new DataLoaderFactory());
             m_service = new SongService(repo);
             m_songs = new Song[3]
             {

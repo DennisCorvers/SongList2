@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SL2Lib.Data;
+using SongList2;
+using SongList2.Data;
 using SongList2.ViewModels;
 using SongList2.Views;
 using System;
 using System.Windows;
 
-namespace YourNamespace
+namespace SongList2
 {
     public partial class App : Application
     {
@@ -17,16 +19,19 @@ namespace YourNamespace
 
             services.AddSingleton<ISongRepo, SongRepo>();
             services.AddSingleton<ISongService, SongService>();
+            services.AddSingleton<IDataLoaderFactory, DataLoaderFactory>();
             services.AddTransient<SongOverviewViewModel>();
-            services.AddTransient<MainWindow>();
+
+            services.AddTransient(x => new MainWindow(x.GetRequiredService<SongOverviewViewModel>()));
 
             _serviceProvider = services.BuildServiceProvider();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.DataContext = _serviceProvider.GetRequiredService<SongOverviewViewModel>();
             mainWindow.Show();
         }
     }

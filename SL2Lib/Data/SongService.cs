@@ -79,5 +79,10 @@ namespace SL2Lib.Data
 
             return query;
         }
+
+        public void LoadSongs(string? filePath)
+        {
+            m_songRepo.Load(filePath);
+        }
     }
 }

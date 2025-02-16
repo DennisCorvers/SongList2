@@ -7,6 +7,7 @@ using NUnit;
 using NUnit.Framework;
 using SL2Lib.Data;
 using SL2Lib.Models;
+using SongList2Test.Factory;
 
 namespace SongList2Test
 {
@@ -20,7 +21,9 @@ namespace SongList2Test
         [SetUp]
         public void SetUp()
         {
-            m_repo = new SongRepo();
+            var loaderFactory = new DataLoaderFactory();
+
+            m_repo = new SongRepo(loaderFactory);
             m_repo.Songs.Add(new Song("Test Song", null, null));
         }
 
@@ -71,10 +74,13 @@ namespace SongList2Test
         [Test]
         public void TestLoad()
         {
+            // Setup the factory to mock a songlist with 1 song
             var songName = Guid.NewGuid();
-            IDataLoader dataLoader = new DataLoader(songName);
+            var dataLoaderFactory = new DataLoaderFactory(songName);
 
-            var repo = SongRepo.Load(dataLoader);
+            // Create a new repo and load the mocked data.
+            var repo = new SongRepo(dataLoaderFactory);
+            repo.Load(null);
 
             Assert.That(repo.Songs.Count, Is.EqualTo(1));
             Assert.That(repo.Songs.First().Name, Is.EqualTo(songName.ToString()));
@@ -82,22 +88,5 @@ namespace SongList2Test
 
         private static string GetDirectory(string fileName)
             => $"{Directory.GetCurrentDirectory()}\\{fileName}";
-
-        private class DataLoader : IDataLoader
-        {
-            private readonly Guid m_guid;
-
-            public DataLoader(Guid songName)
-            {
-                m_guid = songName;
-            }
-
-            public SongList Load()
-            {
-                var sl = new SongList();
-                sl.Songs.Add(new Song(m_guid.ToString(), null, null));
-                return sl;
-            }
-        }
     }
 }

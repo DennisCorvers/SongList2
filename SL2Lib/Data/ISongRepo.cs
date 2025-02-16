@@ -6,6 +6,8 @@ namespace SL2Lib.Data
     {
         HashSet<Song> Songs { get; }
 
+        void Load(string? filePath);
+
         void Persist();
 
         void Persist(string filePath);

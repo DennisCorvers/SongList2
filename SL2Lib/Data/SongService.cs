@@ -16,10 +16,38 @@ namespace SL2Lib.Data
             m_errorLoggers = loggers;
         }
 
+        public void AddSong(Song song)
+        {
+            if (!m_songRepo.Songs.Add(song))
+            {
+                throw new DuplicateSongException(song);
+            }
+        }
+
         public IEnumerable<Song> AddSongs(IEnumerable<Song> songs)
         {
-            // Add songs, check for doubles
-            throw new NotImplementedException();
+            var newSongs = new List<Song>();
+
+            foreach (var song in songs)
+            {
+                try
+                {
+                    AddSong(song);
+                    newSongs.Add(song);
+                }
+                catch (DuplicateSongException ex)
+                {
+                    if (m_errorLoggers != null)
+                    {
+                        foreach (var logger in m_errorLoggers)
+                        {
+                            logger.LogDuplicateSong(ex.DuplicateSong);
+                        }
+                    }
+                }
+            }
+
+            return newSongs;
         }
 
         public void RemoveSongs(IEnumerable<Song> songs)
@@ -51,6 +79,5 @@ namespace SL2Lib.Data
 
             return query;
         }
-
     }
 }

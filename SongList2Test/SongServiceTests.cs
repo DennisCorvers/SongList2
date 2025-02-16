@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SL2Lib;
 using SL2Lib.Data;
 using SL2Lib.Models;
 using System;
@@ -33,10 +34,10 @@ namespace SongList2Test
         [Test]
         public void AddSong()
         {
-            var result = m_service.AddSongs(new Song[1] { m_songs[0] });
+            m_service.AddSong(m_songs[0]);
 
-            Assert.That(m_songs[0], Is.EqualTo(result));
-            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.That(m_songs[0], Is.EqualTo(m_service.SongList.First()));
+            Assert.That(m_service.SongList.Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -51,8 +52,16 @@ namespace SongList2Test
         [Test]
         public void AddDuplicateSong()
         {
-            m_service.AddSongs(new Song[1] { m_songs[0] });
+            m_service.AddSong(m_songs[0]);
+            Assert.That(m_service.SongList.Count(), Is.EqualTo(1));
 
+            var exception = Assert.Throws<DuplicateSongException>(() =>
+            {
+                m_service.AddSong(m_songs[0]);
+            });
+
+            Assert.NotNull(exception);
+            Assert.That(exception.DuplicateSong, Is.EqualTo(m_songs[0]));
             Assert.That(m_service.SongList.Count(), Is.EqualTo(1));
         }
 

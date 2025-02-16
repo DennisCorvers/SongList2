@@ -14,7 +14,8 @@ namespace SongList2
             InitializeComponent();
 
             var loader = DataLoaderFactory.Create("D:\\Downloads\\Song List\\Song List\\bh.Song");
-            var dat = loader.Load();
+            var repo = SongRepo.Load(loader);
+            repo.Persist("D:\\Downloads\\Song List\\Song List\\bh.Song2");
 
             var dataStore = new DataStore("D:\\Downloads\\Song List\\Song List\\bh.Song2");
             var dat2 = dataStore.Load();

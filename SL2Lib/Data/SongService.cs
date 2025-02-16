@@ -1,16 +1,19 @@
-﻿using SL2Lib.Models;
+﻿using SL2Lib.Logging;
+using SL2Lib.Models;
 
 namespace SL2Lib.Data
 {
-    internal class SongService
+    public class SongService : ISongService
     {
         private readonly ISongRepo m_songRepo;
+        private readonly IEnumerable<IErrorLogger>? m_errorLoggers;
 
         public IEnumerable<Song> SongList => m_songRepo.Songs;
 
-        public SongService(ISongRepo songRepo)
+        public SongService(ISongRepo songRepo, IEnumerable<IErrorLogger>? loggers = null)
         {
             m_songRepo = songRepo;
+            m_errorLoggers = loggers;
         }
 
         public IEnumerable<Song> AddSongs(IEnumerable<Song> songs)

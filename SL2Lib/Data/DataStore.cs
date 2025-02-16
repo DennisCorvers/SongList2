@@ -8,8 +8,6 @@ namespace SL2Lib.Data
 
         private readonly string m_filePath;
 
-        public string FilePath => m_filePath;
-
         public DataStore(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))

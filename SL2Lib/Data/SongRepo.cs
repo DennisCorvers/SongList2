@@ -8,17 +8,16 @@ namespace SL2Lib.Data
 
         private IDataSaver? m_dataSaver;
 
-        public ICollection<Song> Songs => m_songList.Songs;
+        public HashSet<Song> Songs => m_songList.Songs;
 
-        public SongRepo(string name)
+        public SongRepo()
         {
-            m_songList = new SongList(name);
+            m_songList = new SongList();
         }
 
         public static SongRepo Load(IDataLoader loader)
         {
-            // string.Empty gets overwritten by the load.
-            var songRepo = new SongRepo(string.Empty)
+            var songRepo = new SongRepo()
             {
                 m_songList = loader.Load(),
             };

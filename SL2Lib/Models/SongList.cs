@@ -6,17 +6,11 @@ namespace SL2Lib.Models
     public class SongList
     {
         [ProtoMember(1)]
-        public string Name { get; set; }
+        public HashSet<Song> Songs { get; }
 
-        [ProtoMember(2)]
-        public List<Song> Songs { get; }
-
-        private SongList() { }
-
-        public SongList(string name)
+        public SongList()
         {
-            Name = name;
-            Songs = new List<Song>();
+            Songs = new HashSet<Song>();
         }
     }
 }

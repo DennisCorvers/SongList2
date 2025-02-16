@@ -4,7 +4,7 @@ namespace SL2Lib.Data
 {
     public interface ISongRepo
     {
-        ICollection<Song> Songs { get; }
+        HashSet<Song> Songs { get; }
 
         void Persist();
 

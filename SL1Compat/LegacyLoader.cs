@@ -10,8 +10,6 @@ namespace SL1Compat
 
         private readonly string m_filePath;
 
-        public string FilePath => m_filePath;
-
         public LegacyLoader(string filePath)
         {
             m_filePath = filePath;
@@ -34,8 +32,12 @@ namespace SL1Compat
             if (legacyData == null)
                 throw new Exception("Unable to load legacy songlist file.");
 
-            var data = new SongList(legacyData.Name);
-            data.Songs.AddRange(legacyData.SongList.Select(MapSong));
+            var data = new SongList();
+
+            foreach (var song in legacyData.SongList.Select(MapSong))
+            {
+                data.Songs.Add(song);
+            }
 
             return data;
         }

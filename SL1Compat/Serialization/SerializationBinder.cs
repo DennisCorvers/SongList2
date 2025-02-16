@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SL1Compat.Serialization
+namespace SL1LegacySupport.Serialization
 {
     public class LegacySerializationBinder : SerializationBinder
     {

@@ -1,8 +1,8 @@
-﻿using SL1Compat.Serialization;
+﻿using SL1LegacySupport.Serialization;
 using SL2Lib.Data;
 using SL2Lib.Models;
 
-namespace SL1Compat
+namespace SL1LegacySupport
 {
     public class LegacyLoader : IDataLoader
     {

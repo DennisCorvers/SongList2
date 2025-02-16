@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 
-namespace SL1Compat.Serialization
+namespace SL1LegacySupport.Serialization
 {
     internal class DataService
     {

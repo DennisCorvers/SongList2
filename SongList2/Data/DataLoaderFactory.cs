@@ -1,4 +1,4 @@
-﻿using SL1Compat;
+﻿using SL1LegacySupport;
 using SL2Lib.Data;
 using System;
 using System.IO;

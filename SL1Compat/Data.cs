@@ -1,6 +1,6 @@
 ﻿using SL2Lib.Models;
 
-namespace SL1Compat
+namespace SL1LegacySupport
 {
     [Serializable]
     internal class Data

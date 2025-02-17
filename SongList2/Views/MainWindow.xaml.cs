@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using SongList2.Data;
 using SongList2.ViewModels;
 using System;
 using System.ComponentModel;
@@ -25,15 +26,18 @@ namespace SongList2.Views
             }
         }
 
+        private readonly IAppSettings m_settings;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        internal MainWindow(SongOverviewViewModel viewModel)
+        internal MainWindow(SongOverviewViewModel viewModel, IAppSettings settings)
             : this()
         {
             ViewModel = viewModel;
+            m_settings = settings;
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -54,7 +58,7 @@ namespace SongList2.Views
                 Title = "Select a Song File",
                 Filter = "Song Files (*.song;*.song2)|*.song;*.song2",
                 DefaultExt = ".song",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
+                InitialDirectory = m_settings.LastSaveLocation,
                 CheckFileExists = true,
                 CheckPathExists = true
             };
@@ -62,6 +66,8 @@ namespace SongList2.Views
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
+                m_settings.LastSaveLocation = Path.GetDirectoryName(filePath) ?? string.Empty;
+
                 string extension = Path.GetExtension(filePath).ToLower();
                 string[] allowedExtensions = { ".song", ".song2" };
 
@@ -91,12 +97,13 @@ namespace SongList2.Views
                 Filter = "Song2 Files (*.song2)|*.song2",
                 DefaultExt = ".song2",
                 AddExtension = true,
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                InitialDirectory = m_settings.LastSaveLocation
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 string filePath = saveFileDialog.FileName;
+                m_settings.LastSaveLocation = Path.GetDirectoryName(filePath) ?? string.Empty;
 
                 try
                 {

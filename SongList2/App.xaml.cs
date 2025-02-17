@@ -20,9 +20,12 @@ namespace SongList2
             services.AddSingleton<ISongRepo, SongRepo>();
             services.AddSingleton<ISongService, SongService>();
             services.AddSingleton<IDataLoaderFactory, DataLoaderFactory>();
+            services.AddSingleton<IAppSettings, AppSettings>();
             services.AddTransient<SongOverviewViewModel>();
 
-            services.AddTransient(x => new MainWindow(x.GetRequiredService<SongOverviewViewModel>()));
+            services.AddTransient(x => new MainWindow(
+                x.GetRequiredService<SongOverviewViewModel>(),
+                x.GetRequiredService<IAppSettings>()));
 
             _serviceProvider = services.BuildServiceProvider();
         }

@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SongList2.Views" xmlns:viewmodels="clr-namespace:SongList2.ViewModels"
+        xmlns:viewmodels="clr-namespace:SongList2.ViewModels"
+        xmlns:behaviour="clr-namespace:SongList2.Views.Behaviour"
         mc:Ignorable="d"
         Title="{Binding Title}"
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
         Closing="WindowClosing"
         Height="450" Width="800">
+    <Window.Resources>
+        <CollectionViewSource x:Key="SongsCollectionView" Source="{Binding Songs}" />
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -28,6 +32,41 @@
                 <MenuItem Header="Open Log File" Click="OpenLatestLogClick" />
             </MenuItem>
         </Menu>
-        <!-- Other UI elements -->
+        
+        
+        <DataGrid x:Name="SongsDataGrid" 
+                  ItemsSource="{Binding Source={StaticResource SongsCollectionView}}"
+                  behaviour:DataGridSelectedItemsBehaviour.SelectedItems="{Binding SelectedSongs, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  CanUserSortColumns="True"
+                  IsReadOnly="True"
+                  SelectionMode="Extended"
+                  Margin="10" 
+                  DockPanel.Dock="Top" 
+                  Height="300">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" 
+                                    Binding="{Binding Name}" 
+                                    SortMemberPath="Name"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Artist" 
+                                    Binding="{Binding Artist}" 
+                                    SortMemberPath="Artist"
+                                    Width="*"
+                                    />
+
+                <DataGridTextColumn Header="Album" 
+                                    Binding="{Binding Album}" 
+                                    SortMemberPath="Album"
+                                    Width="*" />
+
+                <DataGridTextColumn Header="Year" 
+                                    Binding="{Binding Year}" 
+                                    SortMemberPath="Year"
+                                    Width="60" />
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>

@@ -1,27 +1,37 @@
 ﻿using SL2Lib.Data;
 using SL2Lib.Models;
+using SongList2.Commands;
+using SongList2.Utils;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Windows.Input;
 
 namespace SongList2.ViewModels
 {
     internal class SongOverviewViewModel : ViewModelBase
     {
         private const string DefaultTitle = "Unnamed song list";
-        private Song? m_selectedSong;
-        private string m_title;
-        private ISongService m_service;
 
-        public Song? SelectedSong
+        private ObservableCollection<Song> m_selectedSongs;
+
+        private string m_title;
+        private readonly ISongService m_service;
+
+        public ObservableBulkCollection<Song> Songs { get; set; }
+
+        public ObservableCollection<Song> SelectedSongs
         {
             get
             {
-                return m_selectedSong;
+                return m_selectedSongs;
             }
             set
             {
-                m_selectedSong = value;
-                SetProperty(ref m_selectedSong, value);
+                m_selectedSongs = value;
+                OnPropertyChanged();
             }
         }
 
@@ -44,18 +54,24 @@ namespace SongList2.ViewModels
         {
             m_title = GetTitle(null);
             m_service = songService;
+            m_selectedSongs = new ObservableCollection<Song>();
+            Songs = new ObservableBulkCollection<Song>();
         }
 
         internal void NewFile()
         {
             m_service.LoadSongs(null);
-            m_title = GetTitle(null);
+            Title = GetTitle(null);
+            RefreshSongList();
+            SelectedSongs.Clear();
         }
 
         internal void OpenFile(string filePath)
         {
             m_service.LoadSongs(filePath);
-            m_title = GetTitle(filePath);
+            Title = GetTitle(filePath);
+            RefreshSongList();
+            SelectedSongs.Clear();
         }
 
         internal bool SaveFile(string? filePath)
@@ -72,6 +88,18 @@ namespace SongList2.ViewModels
 
             Title = GetTitle(fileName);
             return true;
+        }
+
+        internal void DeleteSongs(IEnumerable<Song> songs)
+        {
+            m_service.RemoveSongs(songs);
+            Songs.RemoveRange(songs);
+        }
+
+        private void RefreshSongList()
+        {
+            Songs = new ObservableBulkCollection<Song>(m_service.SongList);
+            OnPropertyChanged(nameof(Songs));
         }
 
         private static string GetTitle(string? filePath)

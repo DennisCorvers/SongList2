@@ -29,20 +29,20 @@ namespace SL2Lib.Data
             }
         }
 
-        public void Persist(string filePath)
+        public string Persist(string filePath)
         {
             m_dataSaver = new DataStore(filePath);
-            m_dataSaver.Persist(m_songList);
+            return m_dataSaver.Persist(m_songList);
         }
 
-        public void Persist()
+        public string Persist()
         {
             if (m_dataSaver == null)
             {
                 throw new InvalidOperationException("No filepath specified.");
             }
 
-            m_dataSaver.Persist(m_songList);
+            return m_dataSaver.Persist(m_songList);
         }
     }
 }

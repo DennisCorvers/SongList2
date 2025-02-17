@@ -8,8 +8,8 @@ namespace SL2Lib.Data
 
         void Load(string? filePath);
 
-        void Persist();
+        string Persist();
 
-        void Persist(string filePath);
+        string Persist(string filePath);
     }
 }

@@ -10,6 +10,8 @@ namespace SL2Lib.Data
 
         public IEnumerable<Song> SongList => m_songRepo.Songs;
 
+        public bool HasPendingChanges => false;
+
         public SongService(ISongRepo songRepo, IEnumerable<IErrorLogger>? loggers = null)
         {
             m_songRepo = songRepo;
@@ -83,6 +85,18 @@ namespace SL2Lib.Data
         public void LoadSongs(string? filePath)
         {
             m_songRepo.Load(filePath);
+        }
+
+        public string SaveSongs(string? filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return m_songRepo.Persist();
+            }
+            else
+            {
+                return m_songRepo.Persist(filePath);
+            }
         }
     }
 }

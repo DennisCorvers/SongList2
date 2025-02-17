@@ -15,7 +15,7 @@ namespace SongList2Test
     internal class RepositoryTests
     {
         private ISongRepo m_repo;
-        private static readonly string m_filePath = Directory.GetCurrentDirectory() + "\\TestFile.Song2";
+        private static readonly string m_filePath = Directory.GetCurrentDirectory() + "\\TestFile.song2";
 
 
         [SetUp]

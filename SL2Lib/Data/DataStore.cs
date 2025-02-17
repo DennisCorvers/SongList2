@@ -4,7 +4,7 @@ namespace SL2Lib.Data
 {
     public class DataStore : IDataLoader, IDataSaver
     {
-        public const string Extension = "Song2";
+        public const string Extension = "song2";
 
         private readonly string m_filePath;
 
@@ -29,18 +29,16 @@ namespace SL2Lib.Data
 
         public SongList Load()
         {
-            using (var file = File.OpenRead(m_filePath))
-            {
-                return ProtoBuf.Serializer.Deserialize<SongList>(file);
-            }
+            using var file = File.OpenRead(m_filePath);
+            return ProtoBuf.Serializer.Deserialize<SongList>(file);
         }
 
-        public void Persist(SongList data)
+        public string Persist(SongList data)
         {
-            using (var file = File.Create(m_filePath))
-            {
-                ProtoBuf.Serializer.Serialize(file, data);
-            }
+            using var file = File.Create(m_filePath);
+            ProtoBuf.Serializer.Serialize(file, data);
+
+            return m_filePath;
         }
     }
 }

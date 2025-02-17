@@ -6,7 +6,7 @@ namespace SL1LegacySupport
 {
     public class LegacyLoader : IDataLoader
     {
-        public const string Extension = "Song";
+        public const string Extension = "song";
 
         private readonly string m_filePath;
 

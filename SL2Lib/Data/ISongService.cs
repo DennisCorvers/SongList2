@@ -6,7 +6,11 @@ namespace SL2Lib.Data
     {
         IEnumerable<Song> SongList { get; }
 
+        bool HasPendingChanges { get; }
+
         void LoadSongs(string? filePath);
+
+        string SaveSongs(string? filePath);
 
         void AddSong(Song song);
 

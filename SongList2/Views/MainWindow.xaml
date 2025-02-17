@@ -3,10 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SongList2.Views"
+        xmlns:local="clr-namespace:SongList2.Views" xmlns:viewmodels="clr-namespace:SongList2.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="{Binding Title}"
+        d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
+        Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Click="NewFileClick"/>
+                <MenuItem Header="_Open" Click="OpenFileClick"/>
+                <Separator />
+                <MenuItem Header="_Save" Click="SaveFileClick"/>
+                <MenuItem Header="Save _As" Click="SaveFileAsClick"/>
+                <Separator />
+                <MenuItem Header="_Close" Click="ExitApplicationClick"/>
+            </MenuItem>
+            <MenuItem Header="Data">
+                <MenuItem Header="Import" Command="{Binding ImportCommand}" />
+                <MenuItem Header="Export" Command="{Binding ExportCommand}" />
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Open Log File" Command="{Binding OpenLogCommand}" />
+            </MenuItem>
+        </Menu>
+        <!-- Other UI elements -->
+    </DockPanel>
 </Window>

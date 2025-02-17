@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using SL2Lib.Logging;
+using SL2Lib.Models;
 using SongList2.Data;
+using SongList2.Utils;
 using SongList2.ViewModels;
 using System;
 using System.ComponentModel;
@@ -8,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SongList2.Views
 {
@@ -130,6 +133,30 @@ namespace SongList2.Views
             Application.Current.Shutdown();
         }
 
+        private void SongsDataGridKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Delete) return;
+
+            var selectedSongs = SongsDataGrid.SelectedItems.Cast<Song>().ToList();
+
+            if (selectedSongs.Any())
+            {
+                string songCount = selectedSongs.Count == 1 ? "1 song" : $"{selectedSongs.Count} songs";
+                var result = MessageBox.Show($"Are you sure you want to delete {songCount}?",
+                                             "Confirm Deletion",
+                                             MessageBoxButton.YesNo,
+                                             MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    ViewModel.DeleteSongs(selectedSongs);
+                    SongsDataGrid.SelectedItems.Clear();
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private void OpenLatestLogClick(object sender, RoutedEventArgs e)
         {
             var logsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
@@ -180,6 +207,11 @@ namespace SongList2.Views
             {
                 action();
             }
+        }
+
+        private void SearchTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

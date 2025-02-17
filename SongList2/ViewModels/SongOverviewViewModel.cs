@@ -1,13 +1,10 @@
 ﻿using SL2Lib.Data;
 using SL2Lib.Models;
-using SongList2.Commands;
 using SongList2.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Windows.Input;
 
 namespace SongList2.ViewModels
 {
@@ -58,7 +55,7 @@ namespace SongList2.ViewModels
             Songs = new ObservableBulkCollection<Song>();
         }
 
-        internal void NewFile()
+        public void NewFile()
         {
             m_service.LoadSongs(null);
             Title = GetTitle(null);
@@ -66,7 +63,7 @@ namespace SongList2.ViewModels
             SelectedSongs.Clear();
         }
 
-        internal void OpenFile(string filePath)
+        public void OpenFile(string filePath)
         {
             m_service.LoadSongs(filePath);
             Title = GetTitle(filePath);
@@ -74,7 +71,7 @@ namespace SongList2.ViewModels
             SelectedSongs.Clear();
         }
 
-        internal bool SaveFile(string? filePath)
+        public bool SaveFile(string? filePath)
         {
             string? fileName;
             try
@@ -90,7 +87,7 @@ namespace SongList2.ViewModels
             return true;
         }
 
-        internal void DeleteSongs(IEnumerable<Song> songs)
+        public void DeleteSongs(IEnumerable<Song> songs)
         {
             m_service.RemoveSongs(songs);
             Songs.RemoveRange(songs);

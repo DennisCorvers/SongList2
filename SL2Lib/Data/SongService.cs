@@ -96,14 +96,18 @@ namespace SL2Lib.Data
 
         public string SaveSongs(string? filePath)
         {
+            string path;
             if (string.IsNullOrEmpty(filePath))
             {
-                return m_songRepo.Persist();
+                path = m_songRepo.Persist();
             }
             else
             {
-                return m_songRepo.Persist(filePath);
+                path = m_songRepo.Persist(filePath);
             }
+
+            HasPendingChanges = false;
+            return path;
         }
     }
 }

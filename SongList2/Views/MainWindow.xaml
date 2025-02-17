@@ -25,7 +25,7 @@
                 <MenuItem Header="Export" Command="{Binding ExportCommand}" />
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="Open Log File" Command="{Binding OpenLogCommand}" />
+                <MenuItem Header="Open Log File" Click="OpenLatestLogClick" />
             </MenuItem>
         </Menu>
         <!-- Other UI elements -->

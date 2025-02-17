@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
+using SL2Lib.Logging;
 using SongList2.Data;
 using SongList2.ViewModels;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -126,6 +128,24 @@ namespace SongList2.Views
         private void ExitApplicationClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void OpenLatestLogClick(object sender, RoutedEventArgs e)
+        {
+            var logsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+
+            if (Directory.Exists(logsDirectory) && Directory.GetFiles(logsDirectory, "*.txt").Any())
+            {
+                var latestLogFile = Directory.GetFiles(logsDirectory, "*.txt")
+                                             .OrderByDescending(f => new FileInfo(f).CreationTime)
+                                             .First();
+
+                Process.Start(new ProcessStartInfo(latestLogFile) { UseShellExecute = true });
+            }
+            else
+            {
+                MessageBox.Show("No log files found in the Logs directory.", "No Logs", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void PendingChangesAskForSave(Action action)

@@ -1,10 +1,7 @@
 ﻿using SL2Lib.Data;
 using SL2Lib.Models;
-using SongList2.Commands;
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace SongList2.ViewModels
 {

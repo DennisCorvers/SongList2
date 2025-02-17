@@ -93,6 +93,13 @@ namespace SongList2.ViewModels
             Songs.RemoveRange(songs);
         }
 
+        public void FindSongs(string query)
+        {
+            var foundSongs = m_service.FindSongs(query);
+            Songs = new ObservableBulkCollection<Song>(foundSongs);
+            OnPropertyChanged(nameof(Songs));
+        }
+
         private void RefreshSongList()
         {
             Songs = new ObservableBulkCollection<Song>(m_service.SongList);

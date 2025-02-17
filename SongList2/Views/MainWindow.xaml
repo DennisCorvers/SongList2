@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:SongList2.ViewModels"
-        xmlns:behaviour="clr-namespace:SongList2.Views.Behaviour"
+        xmlns:controls="clr-namespace:SongList2.Controls"
         mc:Ignorable="d"
         Title="{Binding Title}"
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
@@ -52,10 +52,7 @@
         </Menu>
 
         <Grid Grid.Row="1" Margin="10,0,10,0">
-            <!-- Song List Label -->
             <Label Content="Song List" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,5"/>
-
-            <!-- DataGrid for Songs -->
             <DataGrid x:Name="SongsDataGrid" 
               ItemsSource="{Binding Source={StaticResource SongsCollectionView}}"
               PreviewKeyDown="SongsDataGridKeyDown"
@@ -97,8 +94,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Search:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <TextBox x:Name="SearchTextBox" HorizontalAlignment="Stretch" Grid.Column="1" Margin="5,0"
-                     TextChanged="SearchTextBox_TextChanged"/>
+            <controls:TimedTextbox x:Name="SearchTextBox" HorizontalAlignment="Stretch" Grid.Column="1" Margin="5,0"
+                     TextChangedAfterDelay="SearchTextBox_TextChanged" SearchDelay="250"/>
         </Grid>
 
     </Grid>

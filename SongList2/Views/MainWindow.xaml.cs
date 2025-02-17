@@ -209,9 +209,9 @@ namespace SongList2.Views
             }
         }
 
-        private void SearchTextBox_TextChanged(object sender, EventArgs e)
+        private void SearchTextBox_TextChanged(object sender, string text)
         {
-
+           
         }
     }
 }

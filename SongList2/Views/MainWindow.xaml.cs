@@ -76,7 +76,14 @@ namespace SongList2.Views
                     MessageBox.Show("Invalid file type selected. Please select a .song or .song2 file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                ViewModel.OpenFile(openFileDialog.FileName);
+                try
+                {
+                    ViewModel.OpenFile(openFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

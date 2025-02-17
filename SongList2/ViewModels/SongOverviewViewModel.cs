@@ -51,12 +51,14 @@ namespace SongList2.ViewModels
 
         internal void NewFile()
         {
-
+            m_service.LoadSongs(null);
+            m_title = GetTitle(null);
         }
 
         internal void OpenFile(string filePath)
         {
-
+            m_service.LoadSongs(filePath);
+            m_title = GetTitle(filePath);
         }
 
         internal bool SaveFile(string? filePath)
@@ -83,7 +85,8 @@ namespace SongList2.ViewModels
             }
             else
             {
-                return Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(filePath);
+                return char.ToUpper(fileName[0]) + fileName.Substring(1);
             }
         }
     }

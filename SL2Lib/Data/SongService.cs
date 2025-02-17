@@ -10,7 +10,7 @@ namespace SL2Lib.Data
 
         public IEnumerable<Song> SongList => m_songRepo.Songs;
 
-        public bool HasPendingChanges => false;
+        public bool HasPendingChanges { get; private set; }
 
         public SongService(ISongRepo songRepo, IEnumerable<IErrorLogger>? loggers = null)
         {
@@ -23,6 +23,10 @@ namespace SL2Lib.Data
             if (!m_songRepo.Songs.Add(song))
             {
                 throw new DuplicateSongException(song);
+            }
+            else
+            {
+                HasPendingChanges = true;
             }
         }
 
@@ -56,7 +60,10 @@ namespace SL2Lib.Data
         {
             foreach (var song in songs)
             {
-                m_songRepo.Songs.Remove(song);
+                if (m_songRepo.Songs.Remove(song))
+                {
+                    HasPendingChanges = true;
+                }
             }
         }
 

@@ -11,6 +11,6 @@ namespace SL2Lib.Data
     {
         IEnumerable<Song> SongList { get; }
 
-        IEnumerable<Song> FindSongs(string query);
+        IEnumerable<Song> FindSongs(string? query);
     }
 }

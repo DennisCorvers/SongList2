@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SL2Lib;
 using SL2Lib.Data;
+using SL2Lib.Logging;
 using SL2Lib.Models;
 using SongList2Test.Factory;
 using System;
@@ -15,6 +16,7 @@ namespace SongList2Test
     internal class SongServiceTests
     {
         private ISongService m_service;
+        private ErrorLogger m_errorLogger;
         private Song[] m_songs;
 
         private static string NewGuid => Guid.NewGuid().ToString();
@@ -23,7 +25,8 @@ namespace SongList2Test
         public void SetUp()
         {
             var repo = new SongRepo(new DataLoaderFactory());
-            m_service = new SongService(repo);
+            m_errorLogger = new ErrorLogger();
+            m_service = new SongService(repo, new IErrorLogger[] { m_errorLogger });
             m_songs = new Song[3]
             {
                 new Song(NewGuid, null, null, null),
@@ -83,21 +86,19 @@ namespace SongList2Test
             CollectionAssert.AreEqual(excludedSongs, m_service.SongList);
         }
 
-        //[Test]
-        //public void FindSong()
-        //{
-        //    const string title = "Test Song";
-        //    m_service.AddSongs(m_songs);
-        //    m_service.AddSongs(new Song[1] { new Song(title, default, default) });
+        [Test]
+        public void AddDuplicateSongs()
+        {
+            var duplicateSongs = new Song[] { m_songs[0], m_songs[1] };
+            m_service.AddSongs(m_songs);
 
-        //    var result1 = m_service.FindSongs(null);
-        //    Assert.That(result1.Count(), Is.EqualTo(4));
+            Assert.That(m_service.SongList.Count(), Is.EqualTo(m_songs.Length));
 
-        //    var result2 = m_service.FindSongs(title);
-        //    Assert.That(result2.Count(), Is.EqualTo(1));
-
-        //    var song = result2.First();
-        //    Assert.That(song.Name, Is.EqualTo(title));
-        //}
+            m_service.AddSongs(duplicateSongs);
+            // Verify that we find the songs in the errorlogger.
+            Assert.That(m_errorLogger.LoggedSongs, Has.Member(m_songs[0]));
+            Assert.That(m_errorLogger.LoggedSongs, Has.Member(m_songs[1]));
+            Assert.That(m_errorLogger.LoggedSongs.Count,  Is.EqualTo(duplicateSongs.Length));
+        }
     }
 }

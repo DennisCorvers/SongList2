@@ -24,7 +24,7 @@ namespace SL2Lib.Data
         public IEnumerable<Song> SongList
             => m_repo.Songs;
 
-        public IEnumerable<Song> FindSongs(string query)
+        public IEnumerable<Song> FindSongs(string? query)
         {
             if (string.IsNullOrEmpty(query))
             {

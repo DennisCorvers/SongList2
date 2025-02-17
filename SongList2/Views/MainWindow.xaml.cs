@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using SongList2.ViewModels;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -33,6 +34,12 @@ namespace SongList2.Views
             : this()
         {
             ViewModel = viewModel;
+        }
+
+        private void WindowClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            PendingChangesAskForSave(() => { e.Cancel = false; });
         }
 
         private void NewFileClick(object sender, RoutedEventArgs e)
@@ -104,7 +111,7 @@ namespace SongList2.Views
 
         private void ExitApplicationClick(object sender, RoutedEventArgs e)
         {
-            PendingChangesAskForSave(Application.Current.Shutdown);
+            Application.Current.Shutdown();
         }
 
         private void PendingChangesAskForSave(Action action)

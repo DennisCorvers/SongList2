@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="{Binding Title}"
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
+        Closing="WindowClosing"
         Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top">

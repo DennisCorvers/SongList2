@@ -211,7 +211,7 @@ namespace SongList2.Views
 
         private void SearchTextBox_TextChanged(object sender, string text)
         {
-           
+            ViewModel.FindSongs(text);
         }
     }
 }

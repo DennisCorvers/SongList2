@@ -15,7 +15,7 @@ namespace SongList2Test.Factory
         public SongList Load()
         {
             var sl = new SongList();
-            sl.Songs.Add(new Song(m_guid.ToString(), null, null));
+            sl.Songs.Add(new Song(m_guid.ToString(), null, null, null));
             return sl;
         }
     }

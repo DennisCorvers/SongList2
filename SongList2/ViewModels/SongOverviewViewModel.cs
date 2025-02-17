@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace SongList2.ViewModels
 {
@@ -16,6 +17,7 @@ namespace SongList2.ViewModels
 
         private string m_title;
         private readonly ISongService m_service;
+        private readonly IQueryService m_queryService;
 
         public ObservableBulkCollection<Song> Songs { get; set; }
 
@@ -47,10 +49,11 @@ namespace SongList2.ViewModels
         public bool HasPendingChanges
             => m_service.HasPendingChanges;
 
-        public SongOverviewViewModel(ISongService songService)
+        public SongOverviewViewModel(ISongService songService, IQueryService queryService)
         {
             m_title = GetTitle(null);
             m_service = songService;
+            m_queryService = queryService;
             m_selectedSongs = new ObservableCollection<Song>();
             Songs = new ObservableBulkCollection<Song>();
         }
@@ -95,7 +98,7 @@ namespace SongList2.ViewModels
 
         public void FindSongs(string query)
         {
-            var foundSongs = m_service.FindSongs(query);
+            var foundSongs = m_queryService.FindSongs(query);
             Songs = new ObservableBulkCollection<Song>(foundSongs);
             OnPropertyChanged(nameof(Songs));
         }

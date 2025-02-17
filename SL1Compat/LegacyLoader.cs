@@ -43,6 +43,6 @@ namespace SL1LegacySupport
         }
 
         private static SL2Lib.Models.Song MapSong(Song song)
-            => new(song.Name, song.Artist, null);
+            => new(song.Name, song.Artist, null, null);
     }
 }

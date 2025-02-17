@@ -16,8 +16,6 @@ namespace SL2Lib.Data
 
         IEnumerable<Song> AddSongs(IEnumerable<Song> songs);
 
-        IEnumerable<Song> FindSongs(string? title, string? artist = default, string? album = default);
-
         void RemoveSongs(IEnumerable<Song> songs);
     }
 }

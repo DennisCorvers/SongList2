@@ -21,6 +21,7 @@ namespace SongList2
 
             services.AddSingleton<ISongRepo, SongRepo>();
             services.AddSingleton<ISongService, SongService>();
+            services.AddSingleton<IQueryService, QueryService>();
             services.AddSingleton<IDataLoaderFactory, DataLoaderFactory>();
             services.AddSingleton<IAppSettings, AppSettings>();
             services.AddSingleton<IErrorLogger, FileLogger>();

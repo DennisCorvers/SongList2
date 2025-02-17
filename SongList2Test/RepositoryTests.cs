@@ -24,7 +24,7 @@ namespace SongList2Test
             var loaderFactory = new DataLoaderFactory();
 
             m_repo = new SongRepo(loaderFactory);
-            m_repo.Songs.Add(new Song("Test Song", null, null));
+            m_repo.Songs.Add(new Song("Test Song", null, null, null));
         }
 
         [TearDown]

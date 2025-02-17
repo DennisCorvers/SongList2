@@ -67,28 +67,6 @@ namespace SL2Lib.Data
             }
         }
 
-        public IEnumerable<Song> FindSongs(string? title, string? artist, string? album)
-        {
-            IEnumerable<Song> query = m_songRepo.Songs;
-
-            if (!string.IsNullOrEmpty(title))
-            {
-                query = query.Where(song => song.Name.Contains(title, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (!string.IsNullOrEmpty(artist))
-            {
-                query = query.Where(song => song.Artist != null && song.Artist.Contains(artist, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (!string.IsNullOrEmpty(album))
-            {
-                query = query.Where(song => song.Album != null && song.Album.Contains(album, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return query;
-        }
-
         public void LoadSongs(string? filePath)
         {
             m_songRepo.Load(filePath);

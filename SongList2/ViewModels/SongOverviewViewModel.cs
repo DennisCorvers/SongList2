@@ -1,10 +1,13 @@
 ﻿using SL2Lib.Data;
 using SL2Lib.Models;
+using SongList2.Data;
 using SongList2.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace SongList2.ViewModels
 {
@@ -17,6 +20,12 @@ namespace SongList2.ViewModels
         private string m_title;
         private readonly ISongService m_service;
         private readonly IQueryService m_queryService;
+        private readonly IAppSettings m_settings;
+
+        private double m_mainWindowWidth;
+        private double m_mainWindowHeight;
+        private double m_mainWindowLeft;
+        private double m_mainWindowTop;
 
         public ObservableBulkCollection<Song> Songs { get; set; }
 
@@ -48,13 +57,75 @@ namespace SongList2.ViewModels
         public bool HasPendingChanges
             => m_service.HasPendingChanges;
 
-        public SongOverviewViewModel(ISongService songService, IQueryService queryService)
+        public double WindowHeight
+        {
+            get => m_mainWindowHeight;
+            set
+            {
+                SetProperty(ref m_mainWindowHeight, value);
+                m_settings.MainWindowHeight = value;
+            }
+        }
+
+        public double WindowWidth
+        {
+            get => m_mainWindowWidth;
+            set
+            {
+                SetProperty(ref m_mainWindowWidth, value);
+                m_settings.MainWindowWidth = value;
+            }
+        }
+
+        public double WindowLeft
+        {
+            get => m_mainWindowLeft;
+            set
+            {
+                SetProperty(ref m_mainWindowLeft, value);
+                m_settings.MainWindowLeft = value;
+            }
+        }
+
+        public double WindowTop
+        {
+            get => m_mainWindowTop;
+            set
+            {
+                SetProperty(ref m_mainWindowTop, value);
+                m_settings.MainWindowTop = value;
+            }
+        }
+
+
+        public SongOverviewViewModel(IAppSettings settings, ISongService songService, IQueryService queryService)
         {
             m_title = GetTitle(null);
             m_service = songService;
             m_queryService = queryService;
+            m_settings = settings;
             m_selectedSongs = new ObservableCollection<Song>();
             Songs = new ObservableBulkCollection<Song>();
+
+            SetWindowLayout();
+        }
+
+        private void SetWindowLayout()
+        {
+            WindowHeight = m_settings.MainWindowHeight;
+            WindowWidth = m_settings.MainWindowWidth;
+
+            // Only set the left / top if the application has been started at least once.
+            if (m_settings.StartVersion > 0)
+            {
+                WindowTop = m_settings.MainWindowTop;
+                WindowLeft = m_settings.MainWindowLeft;
+            }
+            else
+            {
+                WindowLeft = (SystemParameters.PrimaryScreenWidth - WindowWidth) / 2;
+                WindowTop = (SystemParameters.PrimaryScreenHeight - WindowHeight) / 2;
+            }
         }
 
         public void NewFile()

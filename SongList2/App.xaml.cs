@@ -60,6 +60,15 @@ namespace SongList2
             mainWindow.Show();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            Settings.Default.StartVersion = 1;
+            Settings.Default.Reset();
+            Settings.Default.Save();
+        }
+
         private void SetupGlobalExceptionHandling()
         {
             DispatcherUnhandledException += (sender, args) =>

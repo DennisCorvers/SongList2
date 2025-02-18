@@ -7,9 +7,13 @@
         xmlns:controls="clr-namespace:SongList2.Controls"
         mc:Ignorable="d"
         Title="{Binding Title}"
+        d:Height="500"
+        d:Width="800"
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
         Closing="WindowClosing"
-        Height="450" Width="800"
+        Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
+        Left="{Binding WindowLeft, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}"
+        WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/Resources/appicon.ico"
         x:ClassModifier="internal">
 

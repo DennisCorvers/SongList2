@@ -6,6 +6,11 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
+	<ApplicationIcon>appicon.ico</ApplicationIcon>
+	<Title>Song List 2</Title>
+	<Company>Dennis Corvers</Company>
+	<PackageProjectUrl>https://github.com/DennisCorvers/SongList2</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/DennisCorvers/SongList2</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +21,10 @@
     <None Remove="Resources\newfile.png" />
     <None Remove="Resources\open.png" />
     <None Remove="Resources\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appicon.ico" />
   </ItemGroup>
 
   <ItemGroup>

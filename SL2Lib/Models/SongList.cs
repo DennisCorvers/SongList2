@@ -10,7 +10,7 @@ namespace SL2Lib.Models
 
         public SongList()
         {
-            Songs = new HashSet<Song>();
+            Songs = new HashSet<Song>(SongEqualityComparer.Default);
         }
     }
 }

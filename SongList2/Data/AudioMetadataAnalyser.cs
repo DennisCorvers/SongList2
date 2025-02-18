@@ -42,7 +42,7 @@ namespace SongList2.Data
                 }
                 catch (Exception e)
                 {
-                    m_logger.LogError(e.Message);
+                    m_logger.LogError($"{ e.Message} for file: {file}");
                     continue;
                 }
 

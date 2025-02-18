@@ -5,6 +5,7 @@ using SongList2.Data;
 using SongList2.Utils;
 using SongList2.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -191,8 +192,8 @@ namespace SongList2.Views
                     string folderPath = folderDialog.SelectedPath;
                     m_settings.LastImportLocation = folderPath;
 
-                    var importedSongs = m_songAnalyser.GetFileMetadata(folderPath);
-                    ViewModel.AddSongs(importedSongs);
+                    var analysedSongs = m_songAnalyser.GetFileMetadata(folderPath);
+                    ImportSongs(analysedSongs);
                 }
             }
         }
@@ -234,6 +235,18 @@ namespace SongList2.Views
         private void SearchTextBox_TextChanged(object sender, string text)
         {
             ViewModel.FindSongs(text);
+        }
+
+        private void ImportSongs(IEnumerable<Song> songs)
+        {
+            var initialCount = songs.Count();
+            ViewModel.AddSongs(songs);
+
+            var duplicates = initialCount - ViewModel.Songs.Count;
+            if (duplicates > 0)
+            {
+                MessageBox.Show($"{duplicates} duplicate song(s) were excluded. See the log file for more information.", "Duplicate media detected", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

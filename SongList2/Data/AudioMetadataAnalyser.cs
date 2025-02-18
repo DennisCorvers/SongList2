@@ -42,14 +42,14 @@ namespace SongList2.Data
                 }
                 catch (Exception e)
                 {
-                    m_logger.LogError($"{ e.Message} for file: {file}");
+                    m_logger.LogMessage($"{ e.Message} for file: {file}", ErrorLevel.Error);
                     continue;
                 }
 
                 var title = GetTitle(tagFile);
                 if (string.IsNullOrEmpty(title))
                 {
-                    m_logger.LogError($"No title available for file: {tagFile.Name}");
+                    m_logger.LogMessage($"No title available for file: {tagFile.Name}", ErrorLevel.Error);
                     continue;
                 }
 

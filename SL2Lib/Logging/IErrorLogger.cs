@@ -8,6 +8,14 @@ namespace SL2Lib.Logging
 
         void LogDuplicateSong(Song duplicateSong);
 
-        void LogError(string message);
+        void LogMessage(string message, ErrorLevel errorLevel);
+    }
+
+    public enum ErrorLevel
+    {
+        Error = 0,
+        Warning = 1,
+        Info = 2,
+        Fatal = 3,
     }
 }

@@ -184,7 +184,7 @@ namespace SongList2.Views
         {
             using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                folderDialog.Description = "Select a folder to import songs";
+                folderDialog.Description = "Select a folder to import";
                 folderDialog.ShowNewFolderButton = false;
                 folderDialog.InitialDirectory = m_settings.LastImportLocation;
 

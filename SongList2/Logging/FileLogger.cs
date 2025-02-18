@@ -30,7 +30,7 @@ namespace SongList2.Logging
         public void LogDuplicateSong(Song duplicateSong)
             => WriteMessage($"Duplicate song detected: {duplicateSong.Name} by {duplicateSong.Artist}", ErrorLevel.Info);
 
-        public void LogError(string message)
+        public void LogMessage(string message, ErrorLevel errorLevel)
             => WriteMessage(message, ErrorLevel.Error);
 
         private void WriteMessage(string message, ErrorLevel errorLevel)
@@ -40,11 +40,5 @@ namespace SongList2.Logging
             File.AppendAllText(m_logfilePath, logMessage + Environment.NewLine);
             m_errorCount++;
         }
-    }
-
-    public enum ErrorLevel
-    {
-        Info,
-        Error,
     }
 }

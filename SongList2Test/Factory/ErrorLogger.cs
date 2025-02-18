@@ -19,7 +19,7 @@ namespace SongList2Test.Factory
             LoggedSongs.Add(duplicateSong);
         }
 
-        public void LogError(string message)
+        public void LogMessage(string message, ErrorLevel errorLevel)
         {
             throw new NotImplementedException();
         }

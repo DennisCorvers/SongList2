@@ -8,7 +8,9 @@ using SongList2.Logging;
 using SongList2.ViewModels;
 using SongList2.Views;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SongList2
 {
@@ -35,6 +37,9 @@ namespace SongList2
                 x.GetRequiredService<IDataAnalyser<Song>>()));
 
             _serviceProvider = services.BuildServiceProvider();
+
+            // Set up global exception handling
+            SetupGlobalExceptionHandling();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -43,6 +48,37 @@ namespace SongList2
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+        }
+
+        private void SetupGlobalExceptionHandling()
+        {
+            DispatcherUnhandledException += (sender, args) =>
+            {
+                LogAndHandleException(args.Exception, "DispatcherUnhandledException");
+                args.Handled = true;
+            };
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                LogAndHandleException(args.ExceptionObject as Exception, "UnhandledException");
+            };
+
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                LogAndHandleException(args.Exception, "UnobservedTaskException");
+                args.SetObserved();
+            };
+        }
+
+        private void LogAndHandleException(Exception? ex, string source)
+        {
+            if (ex == null) return;
+
+            var logger = _serviceProvider.GetRequiredService<IErrorLogger>();
+            logger.LogMessage($"[{source}] {ex.Message}\n{ex.StackTrace}", ErrorLevel.Fatal);
+
+            MessageBox.Show("An unexpected error occurred. See the log file for details.",
+                            "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

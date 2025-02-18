@@ -186,20 +186,18 @@ namespace SongList2.Views
 
         private async void ImportSongsClick(object sender, RoutedEventArgs e)
         {
-            using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            using var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderDialog.Description = "Select a folder to import";
+            folderDialog.ShowNewFolderButton = false;
+            folderDialog.InitialDirectory = m_settings.LastImportLocation;
+
+            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                folderDialog.Description = "Select a folder to import";
-                folderDialog.ShowNewFolderButton = false;
-                folderDialog.InitialDirectory = m_settings.LastImportLocation;
+                var folderPath = folderDialog.SelectedPath;
+                var parentFolder = Directory.GetParent(folderPath)?.FullName ?? folderPath;
+                m_settings.LastImportLocation = parentFolder;
 
-                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    var folderPath = folderDialog.SelectedPath;
-                    var parentFolder = Directory.GetParent(folderPath)?.FullName ?? folderPath;
-                    m_settings.LastImportLocation = parentFolder;
-
-                    await StartImport(folderPath);
-                }
+                await StartImport(folderPath);
             }
         }
 

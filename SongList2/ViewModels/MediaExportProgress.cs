@@ -2,14 +2,17 @@
 {
     internal class MediaExportProgress
     {
-        public MediaExportProgress(int totalMedia, int progress)
+        public MediaExportProgress(int totalMedia, int progress, string mediaName)
         {
             TotalMedia = totalMedia;
             Progress = progress;
+            MediaName = mediaName;
         }
 
         public int TotalMedia { get; }
 
         public int Progress { get; }
+
+        public string MediaName { get; }
     }
 }

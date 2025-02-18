@@ -21,8 +21,7 @@ namespace SongList2
 
         public void ShowDialog<T>(Window? owner) where T : Window
         {
-            var window = m_serviceProvider.GetService(typeof(T)) as Window;
-            if (window != null)
+            if (m_serviceProvider.GetService(typeof(T)) is Window window)
             {
                 window.Owner = owner;
                 window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -32,8 +31,7 @@ namespace SongList2
 
         public void ShowWindow<T>(Window? owner) where T : Window
         {
-            var window = m_serviceProvider.GetService(typeof(T)) as Window;
-            if (window != null)
+            if (m_serviceProvider.GetService(typeof(T)) is Window window)
             {
                 window.Owner = owner;
                 window.ShowDialog();

@@ -16,10 +16,14 @@ using SL2Lib.Models;
 
 namespace SongList2.ViewModels
 {
-    internal class ExportViewModel : ViewModelBase
+    internal class ExportViewModel : ViewModelBase, IProgress<MediaExportProgress>
     {
         private readonly ISongService m_songService;
         private readonly IErrorLogger m_errorLogger;
+
+        private Visibility m_loadingOverlayVisibility;
+        private string m_loadingText;
+        private double m_progressValue;
 
         private string? m_outputDirectory;
         private bool m_createArtistFolders;
@@ -50,62 +54,48 @@ namespace SongList2.ViewModels
             set { SetProperty(ref m_openFolderAfterExport, value); }
         }
 
-        public ICommand SelectOutputDirectoryCommand { get; }
-        public ICommand ExportCommand { get; }
+        public Visibility LoadingOverlayVisibility
+        {
+            get => m_loadingOverlayVisibility;
+            set => SetProperty(ref m_loadingOverlayVisibility, value);
+        }
 
-        public Func<string?>? RequestFolderSelection { get; set; }
-        public Action<string>? OpenExportFolder { get; set; }
-        public Action<UserNotification>? NotifyUser { get; set; }
-        public Action<MediaExportProgress>? NotifyProgress { get; set; }
+        public string LoadingText
+        {
+            get => m_loadingText;
+            set => SetProperty(ref m_loadingText, value);
+        }
+
+        public double ProgressValue
+        {
+            get => m_progressValue;
+            set => SetProperty(ref m_progressValue, value);
+        }
 
         public ExportViewModel(ISongService songService, IErrorLogger errorLogger)
         {
             m_songService = songService;
             m_errorLogger = errorLogger;
-            SelectOutputDirectoryCommand = new RelayCommand(SelectOutputDirectory);
-            ExportCommand = new RelayCommand(Export);
+            m_loadingText = string.Empty;
 
             CreateArtistFolders = true;
             CreateAlbumFolders = true;
             OpenFolderAfterExport = true;
+            LoadingOverlayVisibility = Visibility.Collapsed;
         }
 
-        private void SelectOutputDirectory()
+        internal async Task<(int ErrorCount, int ExportCount)> Export()
         {
-            var selectedDir = RequestFolderSelection?.Invoke();
-            if (selectedDir != null)
-            {
-                OutputDirectory = selectedDir;
-            }
-        }
-
-        private async void Export()
-        {
-            if (string.IsNullOrWhiteSpace(OutputDirectory))
-            {
-                NotifyUser?.Invoke(new UserNotification("Please select an output directory.", "Warning", MessageBoxImage.Warning));
-                return;
-            }
-
-            if (!TryCreateOutputDirectory(OutputDirectory))
-            {
-                return;
-            }
+            LoadingOverlayVisibility = Visibility.Visible;
+            LoadingText = string.Empty;
+            ProgressValue = 0;
 
             // Filter non-exportable media
-            var exportableMedia = FilterUncoupledMedia(m_songService.SongList).ToList();
-            var exportReport = await ExportMediaAsync(exportableMedia, null);
+            var exportReport = await ExportMediaAsync(m_songService.SongList, this);
 
-            if (exportReport.ErrorCount > 0)
-            {
-                NotifyUser?.Invoke(new UserNotification($"{exportReport.ErrorCount} error(s) occured when trying to export media. See the log file for more information.", "Error exporting", MessageBoxImage.Error));
-            }
+            LoadingOverlayVisibility = Visibility.Collapsed;
 
-            if (exportReport.ExportCount > 0)
-            {
-                NotifyUser?.Invoke(new UserNotification($"Exported {exportReport.ExportCount} files to {OutputDirectory}", "Finished exporting"));
-                OpenExportFolder?.Invoke(OutputDirectory);
-            }
+            return (exportReport.ErrorCount, exportReport.ExportCount);
         }
 
         private Task<ExportReport> ExportMediaAsync(IEnumerable<Song> exportableMedia, IProgress<MediaExportProgress> progress)
@@ -118,6 +108,13 @@ namespace SongList2.ViewModels
 
                 foreach (var song in exportableMedia)
                 {
+                    if (string.IsNullOrEmpty(song.FilePath) || !File.Exists(song.FilePath))
+                    {
+                        errorCount++;
+                        m_errorLogger.LogMessage($"Skipping export: Missing media file \"{song.Name}\".", ErrorLevel.Error);
+                        continue;
+                    }
+
                     string artistFolder = GetOptionalFolderName(song.Artist, "Unknown Artist", CreateArtistFolders);
                     string albumFolder = GetOptionalFolderName(song.Album, "Unknown Album", CreateAlbumFolders);
 
@@ -143,7 +140,7 @@ namespace SongList2.ViewModels
                         m_errorLogger.LogMessage($"Error copying {song.FilePath} to {outputPath}: {ex.Message}", ErrorLevel.Error);
                     }
 
-                    progress.Report(new MediaExportProgress(totalMedia, exportCount + errorCount));
+                    progress.Report(new MediaExportProgress(totalMedia, exportCount + errorCount, song.Name));
                 }
 
                 return new ExportReport(errorCount, exportCount);
@@ -151,47 +148,6 @@ namespace SongList2.ViewModels
             );
 
             return task;
-        }
-
-        private bool TryCreateOutputDirectory(string selectedOutput)
-        {
-            // Creates output root
-            if (!Directory.Exists(selectedOutput))
-            {
-                try
-                {
-                    Directory.CreateDirectory(selectedOutput);
-                }
-                catch (Exception ex)
-                {
-                    NotifyUser?.Invoke(new UserNotification($"Error creating output directory; {ex.Message}", "Error", MessageBoxImage.Error));
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private IEnumerable<Song> FilterUncoupledMedia(IEnumerable<Song> songList)
-        {
-            var missingMedia = songList
-                .Where(song => string.IsNullOrEmpty(song.FilePath) || !File.Exists(song.FilePath))
-                .ToList();
-
-            foreach (var song in missingMedia)
-            {
-                m_errorLogger.LogMessage($"Skipping export: Missing media file \"{song.Name}\".", ErrorLevel.Error);
-            }
-
-            if (missingMedia.Any())
-            {
-                NotifyUser?.Invoke(new UserNotification(
-                    $"{missingMedia.Count} song(s) were skipped due to missing media files. See the log for details.",
-                    "Export Warning",
-                    MessageBoxImage.Warning));
-            }
-
-            return songList.Except(missingMedia);
         }
 
         private static string GetOptionalFolderName(string? folderName, string defaultName, bool include)
@@ -202,6 +158,12 @@ namespace SongList2.ViewModels
             }
 
             return string.IsNullOrEmpty(folderName) ? defaultName : folderName;
+        }
+
+        void IProgress<MediaExportProgress>.Report(MediaExportProgress value)
+        {
+            LoadingText = $"Exporting {value.MediaName} ({value.Progress}/{value.TotalMedia})";
+            ProgressValue = (double)value.Progress / (double)value.TotalMedia * 100;
         }
 
         private class ExportReport

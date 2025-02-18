@@ -123,7 +123,7 @@ namespace SongList2.ViewModels
             else
             {
                 var fileName = Path.GetFileName(filePath);
-                return char.ToUpper(fileName[0]) + fileName.Substring(1);
+                return char.ToUpper(fileName[0]) + fileName[1..];
             }
         }
     }

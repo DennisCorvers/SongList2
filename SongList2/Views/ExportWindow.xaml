@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Content="Select Output Directory" Command="{Binding SelectOutputDirectoryCommand}" Margin="5,0,5,0" Grid.Column="0" />
+            <Button Content="Select Output Directory" Click="SelectOutputDirClick" Command="{Binding SelectOutputDirectoryCommand}" Margin="5,0,5,0" Grid.Column="0" />
             <TextBox Text="{Binding OutputDirectory, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="5,0,0,0" Grid.Column="1"/>
         </Grid>
 
@@ -49,6 +49,18 @@
             <CheckBox IsChecked="{Binding OpenFolderAfterExport}" Grid.Row="2" Grid.Column="1" Margin="5"/>
         </Grid>
 
-        <Button Content="Export" Command="{Binding ExportCommand}" HorizontalAlignment="Center" Grid.Row="3" Width="100" Height="30" Margin="10"/>
+        <Grid Grid.Row="0" Grid.RowSpan="4" Background="#80000000" Name="LoadingOverlay" Visibility="{Binding LoadingOverlayVisibility}">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Background="White" Padding="20" CornerRadius="10">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Exporting..." FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,7"/>
+                        <TextBlock Text="{Binding LoadingText}" FontSize="10" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <ProgressBar Width="200" Height="10" Value="{Binding ProgressValue}" Maximum="100"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Button Content="Export" Click="ExportClick" Command="{Binding ExportCommand}" HorizontalAlignment="Center" Grid.Row="3" Width="100" Height="30" Margin="10"/>
     </Grid>
 </Window>

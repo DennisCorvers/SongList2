@@ -33,9 +33,8 @@ namespace SongList2.Views
             }
         }
 
-        private readonly IAppSettings m_settings;
-
-        private readonly IDataAnalyser<Song> m_songAnalyser;
+        private readonly IAppSettings m_settings = null!;
+        private readonly IDataAnalyser<Song> m_songAnalyser = null!;
 
         public MainWindow()
         {
@@ -266,7 +265,5 @@ namespace SongList2.Views
                 MessageBox.Show($"{duplicates} duplicate song(s) were excluded. See the log file for more information.", "Duplicate media detected", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
-
     }
 }

@@ -1,0 +1,49 @@
+﻿<Window x:Class="SongList2.Views.ExportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:SongList2.ViewModels"
+        xmlns:local="clr-namespace:SongList2.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewmodels:ExportViewModel,IsDesignTimeCreatable=False}"
+        Title="ExportWindow" Height="300" Width="500"
+        Icon="pack://application:,,,/Resources/appicon.ico">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Output Directory" Grid.Row="0" Margin="5,0,0,5"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Select Output Directory" Command="{Binding SelectOutputDirectoryCommand}" Margin="5,0,5,0" Grid.Column="0" />
+            <TextBox Text="{Binding OutputDirectory, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="5,0,0,0" Grid.Column="1"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Create Artist Folders" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5" />
+            <CheckBox IsChecked="{Binding CreateArtistFolders}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+            <TextBlock Text="Create Album Folders" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5" />
+            <CheckBox IsChecked="{Binding CreateAlbumFolders}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        </Grid>
+
+        <Button Content="Export" Command="{Binding ExportCommand}" HorizontalAlignment="Center" Grid.Row="3" Width="100" Height="30" Margin="10"/>
+    </Grid>
+</Window>

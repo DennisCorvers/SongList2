@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace SongList2.ViewModels
 {
@@ -88,6 +87,12 @@ namespace SongList2.ViewModels
 
             Title = GetTitle(fileName);
             return true;
+        }
+
+        public void AddSongs(IEnumerable<Song> songs)
+        {
+            m_service.AddSongs(songs);
+            Songs.AddRange(songs);
         }
 
         public void DeleteSongs(IEnumerable<Song> songs)

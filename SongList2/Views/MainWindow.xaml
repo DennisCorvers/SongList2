@@ -43,7 +43,7 @@
                 <MenuItem Header="_Close" Click="ExitApplicationClick"/>
             </MenuItem>
             <MenuItem Header="Data" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Import" Command="{Binding ImportCommand}" />
+                <MenuItem Header="Import" Click="ImportSongsClick"/>
                 <MenuItem Header="Export" Command="{Binding ExportCommand}" />
             </MenuItem>
             <MenuItem Header="Help" Style="{StaticResource MenuItemStyle}">

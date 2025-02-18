@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SL2Lib.Data;
 using SL2Lib.Logging;
+using SL2Lib.Models;
 using SongList2;
 using SongList2.Data;
 using SongList2.Logging;
@@ -25,11 +26,13 @@ namespace SongList2
             services.AddSingleton<IDataLoaderFactory, DataLoaderFactory>();
             services.AddSingleton<IAppSettings, AppSettings>();
             services.AddSingleton<IErrorLogger, FileLogger>();
+            services.AddSingleton<IDataAnalyser<Song>, AudioMetadataAnalyser>();
             services.AddTransient<SongOverviewViewModel>();
 
             services.AddTransient(x => new MainWindow(
                 x.GetRequiredService<SongOverviewViewModel>(),
-                x.GetRequiredService<IAppSettings>()));
+                x.GetRequiredService<IAppSettings>(),
+                x.GetRequiredService<IDataAnalyser<Song>>()));
 
             _serviceProvider = services.BuildServiceProvider();
         }

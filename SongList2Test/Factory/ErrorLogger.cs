@@ -7,6 +7,8 @@ namespace SongList2Test.Factory
     {
         public List<Song> LoggedSongs { get; }
 
+        public uint ErrorCount => throw new NotImplementedException();
+
         public ErrorLogger()
         {
             LoggedSongs = new List<Song>();
@@ -15,6 +17,11 @@ namespace SongList2Test.Factory
         public void LogDuplicateSong(Song duplicateSong)
         {
             LoggedSongs.Add(duplicateSong);
+        }
+
+        public void LogError(string message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

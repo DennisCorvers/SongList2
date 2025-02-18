@@ -33,16 +33,19 @@ namespace SongList2.Views
 
         private readonly IAppSettings m_settings;
 
+        private readonly IDataAnalyser<Song> m_songAnalyser;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        internal MainWindow(SongOverviewViewModel viewModel, IAppSettings settings)
+        internal MainWindow(SongOverviewViewModel viewModel, IAppSettings settings, IDataAnalyser<Song> songAnalyser)
             : this()
         {
             ViewModel = viewModel;
             m_settings = settings;
+            m_songAnalyser = songAnalyser;
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -172,6 +175,25 @@ namespace SongList2.Views
             else
             {
                 MessageBox.Show("No log files found in the Logs directory.", "No Logs", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void ImportSongsClick(object sender, RoutedEventArgs e)
+        {
+            using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                folderDialog.Description = "Select a folder to import songs";
+                folderDialog.ShowNewFolderButton = false;
+                folderDialog.InitialDirectory = m_settings.LastImportLocation;
+
+                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string folderPath = folderDialog.SelectedPath;
+                    m_settings.LastImportLocation = folderPath;
+
+                    var importedSongs = m_songAnalyser.GetFileMetadata(folderPath);
+                    ViewModel.AddSongs(importedSongs);
+                }
             }
         }
 

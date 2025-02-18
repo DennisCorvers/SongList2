@@ -19,12 +19,16 @@ namespace SL2Lib.Models
         [ProtoMember(4)]
         public int? Year { get; init; }
 
-        public Song(string name, string? artist, string? album, int? year)
+        [ProtoMember(5)]
+        public string? FilePath { get; init; }
+
+        public Song(string name, string? artist, string? album, int? year, string? path = null)
         {
             Name = name;
             Artist = artist;
             Album = album;
             Year = year;
+            FilePath = path;
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

@@ -8,6 +8,11 @@ namespace SongList2.Logging
     internal class FileLogger : IErrorLogger
     {
         private readonly string m_logfilePath;
+        private uint m_errorCount = 0;
+        public uint ErrorCount
+        {
+            get { return m_errorCount; }
+        }
 
         public FileLogger()
         {
@@ -20,15 +25,26 @@ namespace SongList2.Logging
 
             var timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss");
             m_logfilePath = Path.Combine(logsDirectory, $"{timestamp}.txt");
-
-            using (File.Create(m_logfilePath)) { }
         }
 
         public void LogDuplicateSong(Song duplicateSong)
+            => WriteMessage($"Duplicate song detected: {duplicateSong.Name} by {duplicateSong.Artist}", ErrorLevel.Info);
+
+        public void LogError(string message)
+            => WriteMessage(message, ErrorLevel.Error);
+
+        private void WriteMessage(string message, ErrorLevel errorLevel)
         {
             var timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-            var logMessage = $"{timestamp} - Duplicate song detected: {duplicateSong.Name} by {duplicateSong.Artist}";
+            var logMessage = $"{timestamp} [{errorLevel.ToString().ToUpper()}] - {message}";
             File.AppendAllText(m_logfilePath, logMessage + Environment.NewLine);
+            m_errorCount++;
         }
+    }
+
+    public enum ErrorLevel
+    {
+        Info,
+        Error,
     }
 }

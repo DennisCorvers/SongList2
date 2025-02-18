@@ -64,8 +64,6 @@ namespace SongList2
         {
             base.OnExit(e);
 
-            Settings.Default.StartVersion = 1;
-            Settings.Default.Reset();
             Settings.Default.Save();
         }
 

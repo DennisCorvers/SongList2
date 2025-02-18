@@ -28,7 +28,15 @@ namespace SongList2.Logging
         }
 
         public void LogDuplicateSong(Song duplicateSong)
-            => WriteMessage($"Duplicate song detected: {duplicateSong.Name} by {duplicateSong.Artist}", ErrorLevel.Info);
+        {
+            var message = $"Duplicate song detected: {duplicateSong.Name}";
+            if (!string.IsNullOrEmpty(duplicateSong.Artist))
+            {
+                message += $" by {duplicateSong.Artist}";
+            }
+
+            WriteMessage(message, ErrorLevel.Info);
+        }
 
         public void LogMessage(string message, ErrorLevel errorLevel)
             => WriteMessage(message, ErrorLevel.Error);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using SL2Lib.Logging;
 using SL2Lib.Models;
 using SongList2.Data;
@@ -19,7 +20,7 @@ namespace SongList2.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    internal partial class MainWindow : Window
     {
         private SongOverviewViewModel ViewModel
         {
@@ -35,18 +36,22 @@ namespace SongList2.Views
 
         private readonly IAppSettings m_settings = null!;
         private readonly IDataAnalyser<Song> m_songAnalyser = null!;
+        private readonly IWindowService m_windowService;
 
-        public MainWindow()
+        //private MainWindow()
+        //{
+            
+        //}
+
+        [ActivatorUtilitiesConstructor]
+        public MainWindow(SongOverviewViewModel viewModel, IAppSettings settings, IDataAnalyser<Song> songAnalyser, IWindowService windowService)
+            //: this()
         {
             InitializeComponent();
-        }
-
-        internal MainWindow(SongOverviewViewModel viewModel, IAppSettings settings, IDataAnalyser<Song> songAnalyser)
-            : this()
-        {
             ViewModel = viewModel;
             m_settings = settings;
             m_songAnalyser = songAnalyser;
+            m_windowService = windowService;
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -196,6 +201,11 @@ namespace SongList2.Views
                     await StartImport(folderPath);
                 }
             }
+        }
+
+        private void ExportSongsClick(object sender, RoutedEventArgs e)
+        { 
+            m_windowService.ShowDialog<ExportWindow>();
         }
 
         private void PendingChangesAskForSave(Action action)

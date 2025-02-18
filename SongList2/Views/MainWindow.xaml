@@ -10,7 +10,8 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
         Closing="WindowClosing"
         Height="450" Width="800"
-        Icon="pack://application:,,,/Resources/appicon.ico">
+        Icon="pack://application:,,,/Resources/appicon.ico"
+        x:ClassModifier="internal">
 
     <Window.Resources>
         <CollectionViewSource x:Key="SongsCollectionView" Source="{Binding Songs}" />
@@ -29,14 +30,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Menu -->
             <RowDefinition Height="*"/>
-            <!-- Main Content -->
             <RowDefinition Height="Auto"/>
-            <!-- Footer/Search -->
         </Grid.RowDefinitions>
 
-        <!-- Menu (Always Visible) -->
         <Menu Grid.Row="0" Height="25" Background="White">
             <MenuItem Header="_File" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="_New" Click="NewFileClick">
@@ -69,7 +66,7 @@
                         <Image Source="pack://application:,,,/Resources/import.png" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Export" Command="{Binding ExportCommand}">
+                <MenuItem Header="Export" Click="ExportSongsClick">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/export.png" Width="16" Height="16"/>
                     </MenuItem.Icon>

@@ -8,6 +8,7 @@ using SongList2.Logging;
 using SongList2.ViewModels;
 using SongList2.Views;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -26,20 +27,29 @@ namespace SongList2
             services.AddSingleton<ISongService, SongService>();
             services.AddSingleton<IQueryService, QueryService>();
             services.AddSingleton<IDataLoaderFactory, DataLoaderFactory>();
-            services.AddSingleton<IAppSettings, AppSettings>();
             services.AddSingleton<IErrorLogger, FileLogger>();
             services.AddSingleton<IDataAnalyser<Song>, AudioMetadataAnalyser>();
-            services.AddTransient<SongOverviewViewModel>();
 
-            services.AddTransient(x => new MainWindow(
-                x.GetRequiredService<SongOverviewViewModel>(),
-                x.GetRequiredService<IAppSettings>(),
-                x.GetRequiredService<IDataAnalyser<Song>>()));
+            SetupMVVM(services);
 
             _serviceProvider = services.BuildServiceProvider();
 
             // Set up global exception handling
             SetupGlobalExceptionHandling();
+        }
+
+        private static IServiceCollection SetupMVVM(IServiceCollection services)
+        {
+            services.AddSingleton<IAppSettings, AppSettings>();
+            services.AddSingleton<IWindowService, WindowService>();
+
+            services.AddTransient<SongOverviewViewModel>();
+            services.AddTransient<ExportViewModel>();
+
+            services.AddTransient<MainWindow>();
+            services.AddTransient<ExportWindow>();
+
+            return services;
         }
 
         protected override void OnStartup(StartupEventArgs e)

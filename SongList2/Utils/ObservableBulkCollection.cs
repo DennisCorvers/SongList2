@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 
 namespace SongList2.Utils
 {
-    internal class ObservableBulkCollection<T> : ObservableCollection<T>
+    public class ObservableBulkCollection<T> : ObservableCollection<T>
     {
         public ObservableBulkCollection()
             : base() { }

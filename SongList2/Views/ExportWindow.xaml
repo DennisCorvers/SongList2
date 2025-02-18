@@ -7,8 +7,9 @@
         xmlns:local="clr-namespace:SongList2.Views"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewmodels:ExportViewModel,IsDesignTimeCreatable=False}"
-        Title="ExportWindow" Height="300" Width="500"
-        Icon="pack://application:,,,/Resources/appicon.ico">
+        Title="Export Media" Height="300" Width="500"
+        Icon="pack://application:,,,/Resources/appicon.ico"
+        x:ClassModifier="internal">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -35,13 +36,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Create Artist Folders" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5" />
+            <TextBlock Text="Create Artist Folders:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5" />
             <CheckBox IsChecked="{Binding CreateArtistFolders}" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-            <TextBlock Text="Create Album Folders" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5" />
+            <TextBlock Text="Create Album Folders:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5" />
             <CheckBox IsChecked="{Binding CreateAlbumFolders}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+            <TextBlock Text="Open Output Folder:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5" />
+            <CheckBox IsChecked="{Binding OpenFolderAfterExport}" Grid.Row="2" Grid.Column="1" Margin="5"/>
         </Grid>
 
         <Button Content="Export" Command="{Binding ExportCommand}" HorizontalAlignment="Center" Grid.Row="3" Width="100" Height="30" Margin="10"/>

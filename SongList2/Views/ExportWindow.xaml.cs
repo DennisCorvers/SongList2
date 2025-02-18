@@ -1,4 +1,5 @@
-﻿using SL2Lib.Data;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SL2Lib.Data;
 using SL2Lib.Models;
 using SongList2.Data;
 using SongList2.ViewModels;
@@ -10,7 +11,7 @@ namespace SongList2.Views
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
-    public partial class ExportWindow : Window
+    internal partial class ExportWindow : Window
     {
         private ExportViewModel ViewModel
         {
@@ -26,14 +27,10 @@ namespace SongList2.Views
 
         private readonly IAppSettings m_settings = null!;
 
-        public ExportWindow()
+        [ActivatorUtilitiesConstructor]
+        public ExportWindow(ExportViewModel viewModel, IAppSettings settings)
         {
             InitializeComponent();
-        }
-
-        internal ExportWindow(ExportViewModel viewModel, IAppSettings settings)
-            : this()
-        {
             ViewModel = viewModel;
             m_settings = settings;
 

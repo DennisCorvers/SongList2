@@ -56,6 +56,7 @@ namespace SongList2.ViewModels
         public Func<string?>? RequestFolderSelection { get; set; }
         public Action<string>? OpenExportFolder { get; set; }
         public Action<UserNotification>? NotifyUser { get; set; }
+        public Action<MediaExportProgress>? NotifyProgress { get; set; }
 
         public ExportViewModel(ISongService songService, IErrorLogger errorLogger)
         {
@@ -63,6 +64,10 @@ namespace SongList2.ViewModels
             m_errorLogger = errorLogger;
             SelectOutputDirectoryCommand = new RelayCommand(SelectOutputDirectory);
             ExportCommand = new RelayCommand(Export);
+
+            CreateArtistFolders = true;
+            CreateAlbumFolders = true;
+            OpenFolderAfterExport = true;
         }
 
         private void SelectOutputDirectory()
@@ -74,7 +79,7 @@ namespace SongList2.ViewModels
             }
         }
 
-        private void Export()
+        private async void Export()
         {
             if (string.IsNullOrWhiteSpace(OutputDirectory))
             {
@@ -87,9 +92,65 @@ namespace SongList2.ViewModels
                 return;
             }
 
-            // Filter non-exportable media and group by artist / album
-            var exportableMedia = FilterUncoupledMedia(m_songService.SongList);
-            //var groupedMedia = GroupMedia(exportableMedia);
+            // Filter non-exportable media
+            var exportableMedia = FilterUncoupledMedia(m_songService.SongList).ToList();
+            var exportReport = await ExportMediaAsync(exportableMedia, null);
+
+            if (exportReport.ErrorCount > 0)
+            {
+                NotifyUser?.Invoke(new UserNotification($"{exportReport.ErrorCount} error(s) occured when trying to export media. See the log file for more information.", "Error exporting", MessageBoxImage.Error));
+            }
+
+            if (exportReport.ExportCount > 0)
+            {
+                NotifyUser?.Invoke(new UserNotification($"Exported {exportReport.ExportCount} files to {OutputDirectory}", "Finished exporting"));
+                OpenExportFolder?.Invoke(OutputDirectory);
+            }
+        }
+
+        private Task<ExportReport> ExportMediaAsync(IEnumerable<Song> exportableMedia, IProgress<MediaExportProgress> progress)
+        {
+            var task = Task.Run(() =>
+            {
+                int totalMedia = exportableMedia.Count();
+                int errorCount = 0;
+                int exportCount = 0;
+
+                foreach (var song in exportableMedia)
+                {
+                    string artistFolder = GetOptionalFolderName(song.Artist, "Unknown Artist", CreateArtistFolders);
+                    string albumFolder = GetOptionalFolderName(song.Album, "Unknown Album", CreateAlbumFolders);
+
+                    string outputPath = Path.Combine(OutputDirectory!,
+                        artistFolder,
+                        albumFolder,
+                        Path.GetFileName(song.FilePath)!);
+
+                    try
+                    {
+                        var directoryPath = Path.GetDirectoryName(outputPath);
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath!);
+                        }
+
+                        File.Copy(song.FilePath!, outputPath, overwrite: true);
+                        exportCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        errorCount++;
+                        m_errorLogger.LogMessage($"Error copying {song.FilePath} to {outputPath}: {ex.Message}", ErrorLevel.Error);
+                    }
+
+                    progress.Report(new MediaExportProgress(totalMedia, exportCount + errorCount));
+                }
+
+                return new ExportReport(errorCount, exportCount);
+            }
+            );
+
+            return task;
         }
 
         private bool TryCreateOutputDirectory(string selectedOutput)
@@ -133,5 +194,27 @@ namespace SongList2.ViewModels
             return songList.Except(missingMedia);
         }
 
+        private static string GetOptionalFolderName(string? folderName, string defaultName, bool include)
+        {
+            if (!include)
+            {
+                return string.Empty;
+            }
+
+            return string.IsNullOrEmpty(folderName) ? defaultName : folderName;
+        }
+
+        private class ExportReport
+        {
+            public ExportReport(int errorCount, int exportCount)
+            {
+                ErrorCount = errorCount;
+                ExportCount = exportCount;
+            }
+
+            public int ErrorCount { get; }
+
+            public int ExportCount { get; }
+        }
     }
 }

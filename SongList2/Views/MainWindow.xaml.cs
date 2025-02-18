@@ -205,7 +205,7 @@ namespace SongList2.Views
 
         private void ExportSongsClick(object sender, RoutedEventArgs e)
         { 
-            m_windowService.ShowDialog<ExportWindow>();
+            m_windowService.ShowDialog<ExportWindow>(this);
         }
 
         private void PendingChangesAskForSave(Action action)

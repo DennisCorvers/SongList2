@@ -47,7 +47,8 @@ namespace SongList2.Views
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                m_settings.LastExportLocation = dialog.SelectedPath;
+                var parentFolder = Directory.GetParent(dialog.SelectedPath)?.FullName ?? dialog.SelectedPath;
+                m_settings.LastExportLocation = parentFolder;
                 return dialog.SelectedPath;
             }
 

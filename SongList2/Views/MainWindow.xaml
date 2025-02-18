@@ -9,7 +9,8 @@
         Title="{Binding Title}"
         d:DataContext="{d:DesignInstance Type=viewmodels:SongOverviewViewModel,IsDesignTimeCreatable=False}"
         Closing="WindowClosing"
-        Height="450" Width="800">
+        Height="450" Width="800"
+        Icon="pack://application:,,,/Resources/appicon.ico">
 
     <Window.Resources>
         <CollectionViewSource x:Key="SongsCollectionView" Source="{Binding Songs}" />
@@ -38,22 +39,52 @@
         <!-- Menu (Always Visible) -->
         <Menu Grid.Row="0" Height="25" Background="White">
             <MenuItem Header="_File" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="_New" Click="NewFileClick"/>
-                <MenuItem Header="_Open" Click="OpenFileClick"/>
+                <MenuItem Header="_New" Click="NewFileClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/newfile.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open" Click="OpenFileClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/open.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="_Save" Click="SaveFileClick"/>
-                <MenuItem Header="Save _As" Click="SaveFileAsClick"/>
+                <MenuItem Header="_Save" Click="SaveFileClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/save.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Save _As" Click="SaveFileAsClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/save-as.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="_Close" Click="ExitApplicationClick"/>
             </MenuItem>
             <MenuItem Header="Data" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Import" Click="ImportSongsClick"/>
-                <MenuItem Header="Export" Command="{Binding ExportCommand}" />
+                <MenuItem Header="Import" Click="ImportSongsClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/import.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Export" Command="{Binding ExportCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/export.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Help" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Open Log File" Click="OpenLatestLogClick" />
+                <MenuItem Header="Open Log File" Click="OpenLatestLogClick">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/log.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
+
+
 
         <!-- Main UI -->
         <Grid Grid.Row="1" Margin="10,0,10,0">

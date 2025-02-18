@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\appicon.ico" />
+    <None Remove="Resources\export.png" />
+    <None Remove="Resources\import.png" />
+    <None Remove="Resources\log.png" />
+    <None Remove="Resources\newfile.png" />
+    <None Remove="Resources\open.png" />
+    <None Remove="Resources\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SL1Compat\SL1LegacySupport.csproj" />
     <ProjectReference Include="..\SL2Lib\SL2Lib.csproj" />
   </ItemGroup>
@@ -16,6 +26,18 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.2" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\appicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\export.png" />
+    <Resource Include="Resources\import.png" />
+    <Resource Include="Resources\log.png" />
+    <Resource Include="Resources\newfile.png" />
+    <Resource Include="Resources\open.png" />
+    <Resource Include="Resources\save.png" />
   </ItemGroup>
 
   <ItemGroup>

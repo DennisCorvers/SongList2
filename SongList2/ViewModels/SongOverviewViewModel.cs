@@ -91,8 +91,8 @@ namespace SongList2.ViewModels
 
         public void AddSongs(IEnumerable<Song> songs)
         {
-            m_service.AddSongs(songs);
-            Songs.AddRange(songs);
+            var addedSongs = m_service.AddSongs(songs);
+            Songs.AddRange(addedSongs);
         }
 
         public void DeleteSongs(IEnumerable<Song> songs)

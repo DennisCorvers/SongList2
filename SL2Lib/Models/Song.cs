@@ -22,6 +22,12 @@ namespace SL2Lib.Models
         [ProtoMember(5)]
         public string? FilePath { get; init; }
 
+        public string YearString
+        {
+            get => (Year.HasValue && Year.Value > 0) ? Year.Value.ToString() : string.Empty;
+        }
+
+
         public Song(string name, string? artist, string? album, int? year, string? path = null)
         {
             Name = name;

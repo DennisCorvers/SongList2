@@ -28,10 +28,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Menu -->
             <RowDefinition Height="*"/>
+            <!-- Main Content -->
             <RowDefinition Height="Auto"/>
+            <!-- Footer/Search -->
         </Grid.RowDefinitions>
 
+        <!-- Menu (Always Visible) -->
         <Menu Grid.Row="0" Height="25" Background="White">
             <MenuItem Header="_File" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="_New" Click="NewFileClick"/>
@@ -51,43 +55,29 @@
             </MenuItem>
         </Menu>
 
+        <!-- Main UI -->
         <Grid Grid.Row="1" Margin="10,0,10,0">
             <Label Content="Song List" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,5"/>
             <DataGrid x:Name="SongsDataGrid" 
-              ItemsSource="{Binding Source={StaticResource SongsCollectionView}}"
-              PreviewKeyDown="SongsDataGridKeyDown"
-              AutoGenerateColumns="False"
-              CanUserSortColumns="True"
-              IsReadOnly="True"
-              SelectionMode="Extended"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              Margin="0,5,0,0">
+            ItemsSource="{Binding Source={StaticResource SongsCollectionView}}"
+            PreviewKeyDown="SongsDataGridKeyDown"
+            AutoGenerateColumns="False"
+            CanUserSortColumns="True"
+            IsReadOnly="True"
+            SelectionMode="Extended"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            Margin="0,5,0,0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" 
-                                Binding="{Binding Name}" 
-                                SortMemberPath="Name"
-                                Width="*"/>
-
-                    <DataGridTextColumn Header="Artist" 
-                                Binding="{Binding Artist}" 
-                                SortMemberPath="Artist"
-                                Width="*"/>
-
-                    <DataGridTextColumn Header="Album" 
-                                Binding="{Binding Album}" 
-                                SortMemberPath="Album"
-                                Width="*"/>
-
-                    <DataGridTextColumn Header="Year" 
-                                Binding="{Binding Year}" 
-                                SortMemberPath="Year"
-                                Width="60"/>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Name}" SortMemberPath="Name" Width="*"/>
+                    <DataGridTextColumn Header="Artist" Binding="{Binding Artist}" SortMemberPath="Artist" Width="*"/>
+                    <DataGridTextColumn Header="Album" Binding="{Binding Album}" SortMemberPath="Album" Width="*"/>
+                    <DataGridTextColumn Header="Year" Binding="{Binding YearString}" SortMemberPath="Year" Width="60"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
 
-
+        <!-- Footer (Search Box) -->
         <Grid Grid.Row="2" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -95,8 +85,19 @@
             </Grid.ColumnDefinitions>
             <Label Content="Search:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <controls:TimedTextbox x:Name="SearchTextBox" HorizontalAlignment="Stretch" Grid.Column="1" Margin="5,0"
-                     TextChangedAfterDelay="SearchTextBox_TextChanged" SearchDelay="250"/>
+                 TextChangedAfterDelay="SearchTextBox_TextChanged" SearchDelay="250"/>
         </Grid>
 
+        <!-- Loading Spinner Overlay -->
+        <Grid Grid.Row="1" Background="#80000000" Name="LoadingOverlay" Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Background="White" Padding="20" CornerRadius="10">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Loading..." FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="10"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

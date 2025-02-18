@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -179,7 +180,7 @@ namespace SongList2.Views
             }
         }
 
-        private void ImportSongsClick(object sender, RoutedEventArgs e)
+        private async void ImportSongsClick(object sender, RoutedEventArgs e)
         {
             using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -189,11 +190,11 @@ namespace SongList2.Views
 
                 if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    string folderPath = folderDialog.SelectedPath;
-                    m_settings.LastImportLocation = folderPath;
+                    var folderPath = folderDialog.SelectedPath;
+                    var parentFolder = Directory.GetParent(folderPath)?.FullName ?? folderPath;
+                    m_settings.LastImportLocation = parentFolder;
 
-                    var analysedSongs = m_songAnalyser.GetFileMetadata(folderPath);
-                    ImportSongs(analysedSongs);
+                    await StartImport(folderPath);
                 }
             }
         }
@@ -237,6 +238,23 @@ namespace SongList2.Views
             ViewModel.FindSongs(text);
         }
 
+        private async Task StartImport(string folder)
+        {
+            this.IsEnabled = false;
+            this.LoadingOverlay.Visibility = Visibility.Visible;
+
+            try
+            {
+                var analysedSongs = await Task.Run(() => m_songAnalyser.GetFileMetadata(folder));
+                ImportSongs(analysedSongs);
+            }
+            finally
+            {
+                this.LoadingOverlay.Visibility = Visibility.Collapsed;
+                this.IsEnabled = true;
+            }
+        }
+
         private void ImportSongs(IEnumerable<Song> songs)
         {
             var initialCount = songs.Count();
@@ -248,5 +266,7 @@ namespace SongList2.Views
                 MessageBox.Show($"{duplicates} duplicate song(s) were excluded. See the log file for more information.", "Duplicate media detected", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
+
     }
 }

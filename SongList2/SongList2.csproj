@@ -62,6 +62,18 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+	  <None Update="UpdateScript\patch-config.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>patch-config.txt</TargetPath>
+	  </None>
+	  <None Update="UpdateScript\patch.ps1">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>patch.ps1</TargetPath>
+	  </None>
+	  <None Update="UpdateScript\update.bat">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>update.bat</TargetPath>
+	  </None>
   </ItemGroup>
 
 </Project>

@@ -8,18 +8,28 @@ namespace SL2Lib.Models
 
         public bool Equals(Song? x, Song? y)
         {
-            if (ReferenceEquals(x, y)) return true;
-            if (x == null || y == null) return false;
-            return x.Name.Equals(y.Name, StringComparison.OrdinalIgnoreCase) &&
-                   (x.Artist?.Equals(y.Artist, StringComparison.OrdinalIgnoreCase) ?? y.Artist == null);
+            if (x == null || y == null)
+                return false;
+
+            return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(x.Artist, y.Artist, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(x.Album, y.Album, StringComparison.OrdinalIgnoreCase);
         }
 
-        public int GetHashCode([DisallowNull] Song obj)
+        public int GetHashCode(Song obj)
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            int hashName = obj.Name?.GetHashCode(StringComparison.OrdinalIgnoreCase) ?? 0;
-            int hashArtist = obj.Artist?.GetHashCode(StringComparison.OrdinalIgnoreCase) ?? 0;
-            return hashName ^ hashArtist;
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+
+            int hash = StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Name);
+
+            if (obj.Artist != null)
+                hash = HashCode.Combine(hash, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Artist));
+
+            if (obj.Album != null)
+                hash = HashCode.Combine(hash, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Album));
+
+            return hash;
         }
     }
 }
